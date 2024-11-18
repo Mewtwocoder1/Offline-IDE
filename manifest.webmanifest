@@ -6,7 +6,7 @@
   "start_url": "/Offline-IDE/",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
-  "display": "fullscreen", 
+  "display": "standalone", 
   "icons": [
       {
         "src": "/Offline-IDE/icon.png",
