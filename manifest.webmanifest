@@ -1,17 +1,17 @@
 {
-  "name": "Github Page PWA",
-  "short_name": "GPPWA",
-  "description": "Github Page as a Progressive Web App",
-  "scope": "/github-page-pwa/",
-  "start_url": "/github-page-pwa/",
+  "name": "Offline-IDE",
+  "short_name": "OFFIDE",
+  "description": "An Offline IDE as a PWA",
+  "scope": "/Offline-IDE/",
+  "start_url": "/Offline-IDE/",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
-  "display": "standalone", 
+  "display": "fullscreen", 
   "icons": [
       {
-        "src": "/github-page-pwa/img/icon.png",
+        "src": "/Offline-IDE/icon.png",
         "type": "image/png",
-        "sizes": "700x700"
+        "sizes": "1024x1024"
       }
   ]
 }
