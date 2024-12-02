@@ -1,6 +1,3 @@
-const originalConsoleLog = console.log;
-const logs = [];
-
 const registerServiceWorker = async () => {
   if ("serviceWorker" in navigator) {
     try {
@@ -17,14 +14,6 @@ const registerServiceWorker = async () => {
     }
   }
 };
-
-console.log = function(...args) {
-  logs.push(args);
-  var theDiv = document.getElementById("consoleLog");
-  var content = document.createTextNode(logs);
-  theDiv.appendChild(content);
-};
-
 //End of service worker setup
 
 require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@latest/min/vs' }});
