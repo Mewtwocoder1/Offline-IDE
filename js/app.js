@@ -1,7 +1,6 @@
 const originalConsoleLog = console.log;
 const logs = [];
 var theDiv = document.getElementById("#consoleLog");
-var content = document.createTextNode('Console:');
 
 const registerServiceWorker = async () => {
   if ("serviceWorker" in navigator) {
@@ -22,6 +21,7 @@ const registerServiceWorker = async () => {
 
 console.log = function(...args) {
   logs.push(args);
+  var content = document.createTextNode(args);
   theDiv.appendChild(content);
 };
 
