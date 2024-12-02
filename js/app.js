@@ -1,6 +1,6 @@
 const originalConsoleLog = console.log;
 const logs = [];
-var theDiv = document.getElementById("#consoleLog");
+var theDiv = document.getElementById("consoleLog");
 
 const registerServiceWorker = async () => {
   if ("serviceWorker" in navigator) {
