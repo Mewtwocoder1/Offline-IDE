@@ -32,7 +32,7 @@ require(["vs/editor/editor.main"], function () {
 		language: 'html',
 		theme: 'vs-dark'
 	});
+	emmetMonaco.emmetHTML(container);
 });
 
-emmetMonaco.emmetHTML(container);
 registerServiceWorker();
