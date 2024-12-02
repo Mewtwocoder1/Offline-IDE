@@ -16,15 +16,22 @@ const registerServiceWorker = async () => {
 };
 //End of service worker setup
 
-require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.42.0/min/vs' } });
-require(['vs/editor/editor.main'], function () {
-	const editor = monaco.editor.create(document.getElementById('container'), {
-		value: [].join('\n'),
-		language: 'html',
-		theme: 'vs-dark'
-	});
-	emmetMonaco.emmetHTML(editor);
-	window.myEditor = editor;
+require.config({
+    paths: { vs: 'https://unpkg.com/monaco-editor@0.52.0/min/vs' }
 });
 
+require(['vs/editor/editor.main'], function () {
+    const editor = monaco.editor.create(document.getElementById('container'), {
+        value: '<html>\n\t<head>\n\t\t<title>Emmet Example</title>\n\t</head>\n\t<body>\n\t\t\n\t</body>\n</html>',
+        language: 'html',
+        theme: 'vs-dark',
+        automaticLayout: true,
+    });
+
+    // Initialize Emmet plugin
+    emmetMonaco.emmetHTML(editor);
+
+    // Optional: Log a success message
+    console.log('Monaco Editor with Emmet initialized successfully.');
+});
 registerServiceWorker();
