@@ -31,8 +31,8 @@ require(["vs/editor/editor.main"], function () {
 		value: [].join('\n'),
 		language: 'html',
 		theme: 'vs-dark'
+		emmetMonaco.emmetHTML(container);
 	});
 });
 
-emmetMonaco.emmetHTML(container);
 registerServiceWorker();
