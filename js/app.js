@@ -1,3 +1,14 @@
+const originalConsoleLog = console.log;
+const logs = [];
+var theDiv = document.getElementById("#consoleLog");
+
+console.log = function(...args) {
+  logs.push(args);
+  originalConsoleLog.apply(console, args);
+  var content = document.createTextNode(logs);
+  theDiv.appendChild(content);
+};
+
 const registerServiceWorker = async () => {
   if ("serviceWorker" in navigator) {
     try {
