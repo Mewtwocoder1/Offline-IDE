@@ -16,22 +16,22 @@ const registerServiceWorker = async () => {
 };
 //End of service worker setup
 
-require.config({
-    paths: { vs: 'https://unpkg.com/monaco-editor@0.52.0/min/vs' }
-});
+require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@latest/min/vs' }});
+window.MonacoEnvironment = { getWorkerUrl: () => proxy };
 
-require(['vs/editor/editor.main'], function () {
-    const editor = monaco.editor.create(document.getElementById('container'), {
-        value: '<html>\n\t<head>\n\t\t<title>Emmet Example</title>\n\t</head>\n\t<body>\n\t\t\n\t</body>\n</html>',
-        language: 'html',
-        theme: 'vs-dark',
-        automaticLayout: true,
-    });
+let proxy = URL.createObjectURL(new Blob([`
+	self.MonacoEnvironment = {
+		baseUrl: 'https://unpkg.com/monaco-editor@latest/min/'
+	};
+	importScripts('https://unpkg.com/monaco-editor@latest/min/vs/base/worker/workerMain.js');
+`], { type: 'text/javascript' }));
 
-    // Initialize Emmet plugin
+require(["vs/editor/editor.main"], function () {
+	let editor = monaco.editor.create(document.getElementById('container'), {
+		value: [].join('\n'),
+		language: 'html',
+		theme: 'vs-dark'
+	});
     emmetMonaco.emmetHTML(editor);
-
-    // Optional: Log a success message
-    console.log('Monaco Editor with Emmet initialized successfully.');
 });
 registerServiceWorker();
