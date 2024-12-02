@@ -1,11 +1,10 @@
 const originalConsoleLog = console.log;
 const logs = [];
 var theDiv = document.getElementById("#consoleLog");
+var content = document.createTextNode('Console:');
 
 console.log = function(...args) {
   logs.push(args);
-  originalConsoleLog.apply(console, args);
-  var content = document.createTextNode(logs);
   theDiv.appendChild(content);
 };
 
