@@ -1,4 +1,4 @@
-const staticDevCoffee = "OFFIDE-v1"
+const webOffideCache = "OFFIDE-v1"
 const assets = [
   "/",
   "/index.html",
@@ -8,7 +8,7 @@ const assets = [
 
 self.addEventListener("install", installEvent => {
   installEvent.waitUntil(
-    caches.open(staticOFFIDE).then(cache => {
+    caches.open(webOffideCache).then(cache => {
       cache.addAll(assets)
     })
   )
