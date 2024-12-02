@@ -34,5 +34,5 @@ require(["vs/editor/editor.main"], function () {
 	});
 });
 
-emmetMonaco.emmetHTML(window.MonacoEnvironment);
+emmetMonaco.emmetHTML(monaco);
 registerServiceWorker();
