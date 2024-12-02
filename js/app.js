@@ -28,12 +28,8 @@ let proxy = URL.createObjectURL(new Blob([`
 
 require(["vs/editor/editor.main"], function () {
 	let editor = monaco.editor.create(document.getElementById('container'), {
-		value: [
-			'function x() {',
-			'\tconsole.log("Hello world!");',
-			'}'
-		].join('\n'),
-		language: 'javascript',
+		value: [].join('\n'),
+		language: 'html',
 		theme: 'vs-dark'
 	});
 });
