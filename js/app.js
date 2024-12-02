@@ -33,4 +33,6 @@ require(["vs/editor/editor.main"], function () {
 		theme: 'vs-dark'
 	});
 });
+
+emmetMonaco.emmetHTML(window.monaco)
 registerServiceWorker();
