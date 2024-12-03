@@ -6,7 +6,7 @@ body {
 	grid-template-columns: 1fr 1fr
 }
 
-#container, #consoleLog {
+#editor, #preview {
 	height: 100%;
 	margin: 0;
 	padding: 0;
