@@ -21,7 +21,7 @@ require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.43
     require(['vs/editor/editor.main'], function () {
       // Create the Monaco editor instance
       const editor = monaco.editor.create(document.getElementById('editor'), {
-        value: '<html>\n  <head>\n    <title>Monaco with Emmet</title>\n  </head>\n  <body>\n    <h1>Welcome to Monaco!</h1>\n  </body>\n</html>',
+        value: '',
         language: 'html',
 	theme: 'vs-dark'
       });
