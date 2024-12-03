@@ -16,22 +16,22 @@ const registerServiceWorker = async () => {
 };
 //End of service worker setup
 
-require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@latest/min/vs' }});
-window.MonacoEnvironment = { getWorkerUrl: () => proxy };
+require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs' } });
 
-let proxy = URL.createObjectURL(new Blob([`
-	self.MonacoEnvironment = {
-		baseUrl: 'https://unpkg.com/monaco-editor@latest/min/'
-	};
-	importScripts('https://unpkg.com/monaco-editor@latest/min/vs/base/worker/workerMain.js');
-`], { type: 'text/javascript' }));
+    require(['vs/editor/editor.main'], function () {
+      // Create the Monaco editor instance
+      const editor = monaco.editor.create(document.getElementById('editor'), {
+        value: '<html>\n  <head>\n    <title>Monaco with Emmet</title>\n  </head>\n  <body>\n    <h1>Welcome to Monaco!</h1>\n  </body>\n</html>',
+        language: 'html'
+	theme: 'vs-dark'
+      });
 
-require(["vs/editor/editor.main"], function () {
-	let editor = monaco.editor.create(document.getElementById('container'), {
-		value: [].join('\n'),
-		language: 'html',
-		theme: 'vs-dark'
-	});
-    emmetMonaco.emmetHTML(editor);
-});
+      // Initialize Emmet for Monaco
+      emmetMonaco.emmetHTML(monaco);
+
+      // Optional: You can trigger Emmet expansion using shortcut
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Space, function() {
+        emmetMonaco.expandAbbreviation(editor);
+      });
+    });
 registerServiceWorker();
