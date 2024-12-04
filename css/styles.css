@@ -12,3 +12,7 @@ body {
 	padding: 0;
 	overflow: hidden;
 }
+
+#preview {
+	background: black;
+}
