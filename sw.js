@@ -1,83 +1,73 @@
-const addResourcesToCache = async (resources) => {
-  const cache = await caches.open('v1');
-  await cache.addAll(resources);
-};
+/*
+ Copyright 2016 Google Inc. All Rights Reserved.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 
-const putInCache = async (request, response) => {
-  const cache = await caches.open('v1');
-  await cache.put(request, response);
-};
+// Names of the two caches used in this version of the service worker.
+// Change to v2, etc. when you update any of the local resources, which will
+// in turn trigger the install event again.
+const PRECACHE = 'precache-v1';
+const RUNTIME = 'runtime';
 
-const cacheFirst = async ({ request, preloadResponsePromise, fallbackUrl }) => {
-  // First try to get the resource from the cache
-  const responseFromCache = await caches.match(request);
-  if (responseFromCache) {
-    return responseFromCache;
-  }
+// A list of local resources we always want to be cached.
+const PRECACHE_URLS = [
+  './index.html',
+  './css/styles.css',
+  './js/app.js'
+];
 
-  // Next try to use the preloaded response, if it's there
-  // NOTE: Chrome throws errors regarding preloadResponse, see:
-  // https://bugs.chromium.org/p/chromium/issues/detail?id=1420515
-  // https://github.com/mdn/dom-examples/issues/145
-  // To avoid those errors, remove or comment out this block of preloadResponse
-  // code along with enableNavigationPreload() and the "activate" listener.
-  const preloadResponse = await preloadResponsePromise;
-  if (preloadResponse) {
-    console.info('using preload response', preloadResponse);
-    putInCache(request, preloadResponse.clone());
-    return preloadResponse;
-  }
-
-  // Next try to get the resource from the network
-  try {
-    const responseFromNetwork = await fetch(request.clone());
-    // response may be used only once
-    // we need to save clone to put one copy in cache
-    // and serve second one
-    putInCache(request, responseFromNetwork.clone());
-    return responseFromNetwork;
-  } catch (error) {
-    const fallbackResponse = await caches.match(fallbackUrl);
-    if (fallbackResponse) {
-      return fallbackResponse;
-    }
-    // when even the fallback response is not available,
-    // there is nothing we can do, but we must always
-    // return a Response object
-    return new Response('Network error happened', {
-      status: 408,
-      headers: { 'Content-Type': 'text/plain' },
-    });
-  }
-};
-
-const enableNavigationPreload = async () => {
-  if (self.registration.navigationPreload) {
-    // Enable navigation preloads!
-    await self.registration.navigationPreload.enable();
-  }
-};
-
-self.addEventListener('activate', (event) => {
-  event.waitUntil(enableNavigationPreload());
-});
-
-self.addEventListener('install', (event) => {
+// The install handler takes care of precaching the resources we always need.
+self.addEventListener('install', event => {
   event.waitUntil(
-    addResourcesToCache([
-      './',
-      './index.html',
-      './css/style.css',
-      './js/app.js',
-    ])
+    caches.open(PRECACHE)
+      .then(cache => cache.addAll(PRECACHE_URLS))
+      .then(self.skipWaiting())
   );
 });
 
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    cacheFirst({
-      request: event.request,
-      preloadResponsePromise: event.preloadResponse,
-    })
+// The activate handler takes care of cleaning up old caches.
+self.addEventListener('activate', event => {
+  const currentCaches = [PRECACHE, RUNTIME];
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
+    }).then(cachesToDelete => {
+      return Promise.all(cachesToDelete.map(cacheToDelete => {
+        return caches.delete(cacheToDelete);
+      }));
+    }).then(() => self.clients.claim())
   );
+});
+
+// The fetch handler serves responses for same-origin resources from a cache.
+// If no response is found, it populates the runtime cache with the response
+// from the network before returning it to the page.
+self.addEventListener('fetch', event => {
+  // Skip cross-origin requests, like those for Google Analytics.
+  if (event.request.url.startsWith(self.location.origin)) {
+    event.respondWith(
+      caches.match(event.request).then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        return caches.open(RUNTIME).then(cache => {
+          return fetch(event.request).then(response => {
+            // Put a copy of the response in the runtime cache.
+            return cache.put(event.request, response.clone()).then(() => {
+              return response;
+            });
+          });
+        });
+      })
+    );
+  }
 });
