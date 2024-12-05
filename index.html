@@ -40,6 +40,15 @@
     <link rel="apple-touch-icon" href="images/icons/ios/1024.png">
     <meta name="apple-mobile-web-app-status-bar" content="#db4938">
     <meta name="theme-color" content="#db4938">
+    <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (const registration of registrations) {
+          registration.unregister().then(() => console.log('Unregistered old service worker.'));
+        }
+      });
+    }
+    </script>
 
     <title>Offide</title>
   </head>
