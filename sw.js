@@ -6,7 +6,9 @@ if (workbox) {
   // Precache your files
   workbox.precaching.precacheAndRoute([
     { url: './index.html', revision: '1' },
-    { url: './manifest.json', revision: '1' }
+    { url: './js/app.js', revision: '1' },
+    { url: './css/styles.css', revision: '1' },
+    { url: './manifest.json', revision: '1' },
     { url: './images/icons/', revision: '1' },
     { url: './sw.js', revision: '1' },
   ]);
