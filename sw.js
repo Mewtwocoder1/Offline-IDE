@@ -23,3 +23,20 @@ if (workbox) {
 } else {
   console.error('Workbox failed to load.');
 }
+const CACHE_NAME = 'my-app-cache-v1'; // Update with your current cache name
+const EXPECTED_CACHES = [CACHE_NAME];
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (!EXPECTED_CACHES.includes(cacheName)) {
+            console.log(`Deleting old cache: ${cacheName}`);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+});
