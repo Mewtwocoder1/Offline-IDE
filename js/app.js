@@ -1,19 +1,8 @@
-const registerServiceWorker = async () => {
-  if ("serviceWorker" in navigator) {
-    try {
-      const registration = await navigator.serviceWorker.register("./sw.js");
-      if (registration.installing) {
-        console.log("Service worker installing");
-      } else if (registration.waiting) {
-        console.log("Service worker installed");
-      } else if (registration.active) {
-        console.log("Service worker active");
-      }
-    } catch (error) {
-      console.error(`Registration failed with ${error}`);
-    }
-  }
-};
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./service-worker.js')
+    .then(() => console.log('Service Worker Registered!'))
+    .catch(err => console.error('Service Worker Registration Failed:', err));
+}
 //End of service worker setup
 
 require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs' } });
