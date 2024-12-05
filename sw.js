@@ -23,7 +23,7 @@ if (workbox) {
 } else {
   console.error('Workbox failed to load.');
 }
-const CACHE_NAME = 'my-app-cache-v1'; // Update with your current cache name
+const CACHE_NAME = 'offide-v1';
 const EXPECTED_CACHES = [CACHE_NAME];
 
 self.addEventListener('activate', (event) => {
