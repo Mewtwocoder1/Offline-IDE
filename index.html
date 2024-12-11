@@ -9,6 +9,14 @@
     <script>eruda.init();</script>
     <script src="https://unpkg.com/monaco-editor@latest/min/vs/loader.js"></script>
     <script src="js/app.js"></script>
+    <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js')
+        .then(() => console.log('Service Worker Registered!'))
+        .catch(err => console.error('Service Worker Registration Failed:', err));
+    }
+    </script>
+
 
     <link rel="manifest" href="manifest.json">
     <!-- ios support -->
